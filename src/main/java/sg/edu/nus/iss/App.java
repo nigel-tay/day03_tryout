@@ -1,5 +1,7 @@
 package sg.edu.nus.iss;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,9 +18,14 @@ public class App {
         String input = "";
         List<String> listOfFruits = null;
         int givenIndex = 0;
+        String dirName = args[0];
+        String loginName = "";
+        String dirFileName = dirName + File.separator + loginName;
+        File newDirFileName = null;
 
         // Initialise scanner
         scan = new Scanner(System.in);
+
         try {
 
             while (!(commandGiven.equals("quit"))) {
@@ -61,20 +68,45 @@ public class App {
                 // Delete
                 if (commandGiven.equals("delete")) {
                     givenIndex = Integer.parseInt(scan.next()) - 1;
+                    // If index given is greater than list size, print error message
                     if (givenIndex > fruitList.size() - 1 || givenIndex < 0) {
                         System.out.println("The given index is out of bounds, try a number within the scope of this list 😠");
                     }
                     else {
                         // Delete item at specified index
-                        System.out.println(fruitList.get(givenIndex) + " deleted from list 🛒");
+                        System.out.println(fruitList.get(givenIndex) + " deleted from cart 🛒");
                         fruitList.remove(givenIndex);
-                        // If index given is greater than list size, print error message
                     }
                 }
-                // Save
-                // if (commandGiven == "save") {
+                // login
+                if (commandGiven.equals("login")) {
+                    loginName = scan.next();
+                    // Check if argument is given
+                    if (dirName.isEmpty()) {
+                        dirName = "db";
+                        newDirFileName = new File(dirFileName);
+                        // saveFile();
+                        if (newDirFileName.exists()) {
+                            // Save contents of fruitList into db/loginName
+                        }
+                        else {
+                            // Create file in db folder and save content of fruitList into db/loginName
+                
+                        }
+                    }
+                    else {
+                        dirName = "cartdb";
+                        newDirFileName = new File(dirFileName);
+                    }
+                    // Check to see if the cartdb directory exists
+                    // Yes? Print exists
+                    // No? Create dir
+                }
 
-                // }
+                // Save
+                if (commandGiven.equals("save")) {
+                    // Check if user file exists
+                }
             }
 
         } catch (Exception e) {
