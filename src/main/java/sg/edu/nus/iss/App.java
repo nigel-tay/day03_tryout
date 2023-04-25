@@ -15,6 +15,7 @@ public class App {
         String commandGiven = "";
         String input = "";
         List<String> listOfFruits = null;
+        int givenIndex = 0;
 
         // Initialise scanner
         scan = new Scanner(System.in);
@@ -56,10 +57,20 @@ public class App {
                         }
 
                 }
-                // Delete
-                // Delete item at specified index
-                // If index given is greater than list size, print error message
 
+                // Delete
+                if (commandGiven.equals("delete")) {
+                    givenIndex = Integer.parseInt(scan.next()) - 1;
+                    if (givenIndex > fruitList.size() - 1 || givenIndex < 0) {
+                        System.out.println("The given index is out of bounds, try a number within the scope of this list 😠");
+                    }
+                    else {
+                        // Delete item at specified index
+                        System.out.println(fruitList.get(givenIndex) + " deleted from list 🛒");
+                        fruitList.remove(givenIndex);
+                        // If index given is greater than list size, print error message
+                    }
+                }
                 // Save
                 // if (commandGiven == "save") {
 
