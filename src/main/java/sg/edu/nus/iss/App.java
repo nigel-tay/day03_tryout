@@ -1,7 +1,6 @@
 package sg.edu.nus.iss;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,9 +17,9 @@ public class App {
         String input = "";
         List<String> listOfFruits = null;
         int givenIndex = 0;
-        String dirName = args[0];
+        String dirName = args.length == 0 ?  "db" : args[0];
         String loginName = "";
-        String dirFileName = dirName + File.separator + loginName;
+        String dirFileName = "";
         File newDirFileName = null;
 
         // Initialise scanner
@@ -83,24 +82,15 @@ public class App {
                     loginName = scan.next();
                     // Check if argument is given
                     if (dirName.isEmpty()) {
-                        dirName = "db";
+                        dirFileName = dirName + File.separator + loginName;
                         newDirFileName = new File(dirFileName);
-                        // saveFile();
-                        if (newDirFileName.exists()) {
-                            // Save contents of fruitList into db/loginName
-                        }
-                        else {
-                            // Create file in db folder and save content of fruitList into db/loginName
-                
-                        }
+                        saveFile(newDirFileName);
                     }
                     else {
-                        dirName = "cartdb";
+                        dirFileName = dirName + File.separator + loginName;
                         newDirFileName = new File(dirFileName);
+                        saveFile(newDirFileName);
                     }
-                    // Check to see if the cartdb directory exists
-                    // Yes? Print exists
-                    // No? Create dir
                 }
 
                 // Save
@@ -116,5 +106,17 @@ public class App {
         finally {
             scan.close();
         }
+    }
+
+    public static void saveFile(File directoryName) {
+        if (directoryName.exists()) {
+            // Save contents of fruitList into db/loginName
+            System.out.println("Logged in as " + directoryName);
+        }
+        else {
+            // Create file in db folder and save content of fruitList into db/loginName
+            System.out.println("Created log in profile " + directoryName);
+        }
+        
     }
 }
