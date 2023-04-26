@@ -1,13 +1,17 @@
 package sg.edu.nus.iss;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Start program with welcome message
         System.out.println("Welcome to your cart thing 🥵");
         // Variables
@@ -17,10 +21,15 @@ public class App {
         String input = "";
         List<String> listOfFruits = null;
         int givenIndex = 0;
-        String dirName = args.length == 0 ?  "db" : args[0];
         String loginName = "";
+        String dirName = args.length == 0 ?  "db" : args[0];
+        File dirFileObj = new File(dirName);
         String dirFileName = "";
         File newDirFileName = null;
+
+        // Write file variables
+        FileWriter fw = null;
+        BufferedWriter bw = null;
 
         // Initialise scanner
         scan = new Scanner(System.in);
@@ -81,12 +90,14 @@ public class App {
                 if (commandGiven.equals("login")) {
                     loginName = scan.next();
                     // Check if argument is given
-                    if (dirName.isEmpty()) {
+                    if (dirName.isEmpty()) { // Use db directory
+                        checkFileExists(dirFileObj); // Checks if directory exists, if not create the directory
                         dirFileName = dirName + File.separator + loginName;
                         newDirFileName = new File(dirFileName);
                         saveFile(newDirFileName);
                     }
-                    else {
+                    else { // Use cartdb directory
+                        checkFileExists(dirFileObj); // Checks if directory exists, if not create the directory
                         dirFileName = dirName + File.separator + loginName;
                         newDirFileName = new File(dirFileName);
                         saveFile(newDirFileName);
@@ -95,7 +106,19 @@ public class App {
 
                 // Save
                 if (commandGiven.equals("save")) {
-                    // Check if user file exists
+                    // Check logged in user exists or not, no? Ask user to login
+                    if (newDirFileName == null) {
+                        System.out.println("Login first!");
+                    }
+                    else {
+                        fw = new FileWriter(newDirFileName);
+                        bw = new BufferedWriter(fw);
+                        for (String fruit: fruitList) {
+                            bw.write(fruit + "\n");
+                            bw.flush();
+                        }
+                        System.out.println("Your cart has been saved!");
+                    }
                 }
             }
 
@@ -105,18 +128,25 @@ public class App {
         }
         finally {
             scan.close();
+            bw.close();
+            fw.close();
         }
     }
 
-    public static void saveFile(File directoryName) {
-        if (directoryName.exists()) {
-            // Save contents of fruitList into db/loginName
-            System.out.println("Logged in as " + directoryName);
+    public static void checkFileExists(File dirObj) {
+        if (!(dirObj.exists())) {
+            dirObj.mkdir();
+        }
+    }
+
+    public static void saveFile(File fileObj) throws IOException {
+        if (fileObj.exists()) {
+            System.out.println("Logged in as " + fileObj);
         }
         else {
             // Create file in db folder and save content of fruitList into db/loginName
-            System.out.println("Created log in profile " + directoryName);
+            fileObj.createNewFile();
+            System.out.println("Created log in profile " + fileObj);
         }
-        
     }
 }
