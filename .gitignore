@@ -1,6 +1,10 @@
 # target folder
 target/
 
+# cartdb and db folders
+src/main/java/sg/edu/nus/iss/cartdb
+src/main/java/sg/edu/nus/iss/db
+
 # Compiled class file
 *.class
 
